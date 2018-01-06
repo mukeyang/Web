@@ -1,4 +1,6 @@
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -6,13 +8,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Properties;
 import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by CS on 2018/1/3.
  */
-@WebServlet("/hello")
+@WebServlet(name="Servlet",value="/hello",asyncSupported = true,loadOnStartup = -1,initParams = {@WebInitParam(name = "username",value = "yang")})
 public class Servlet extends HttpServlet {
+//private ServletConfig config;
+
+
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
@@ -24,7 +32,38 @@ public class Servlet extends HttpServlet {
 //        doGzip(response);
 //        doType(response);
 //        doFresh(response, "refresh", "1", "1234".getBytes());
-        doDownload(response, "1.PNG", "content-disposition", "attachment;filename=yang.jpeg");
+//        doDownload(response, "1.PNG", "content-disposition", "attachment;filename=yang.jpeg");
+//        test(request, response);
+        readInfo();
+    }
+
+    private void readInfo() throws IOException {
+        InputStream inputStream = getServletContext().getResourceAsStream("/WEB-INF/classes/info.properties");
+        Properties properties = new Properties();
+        properties.load(inputStream);
+        properties.list(System.out);
+        System.out.println(System.getProperty("user.dir"));
+    }
+
+    private void test(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println(getServletConfig().getServletContext().getMajorVersion());
+        System.out.println(getServletConfig().getServletContext().getResourcePaths("/"));
+        System.out.println(getServletContext().getInitParameter("dat"));
+        getServletContext().setAttribute("chen","chen");
+//        getServletContext()
+//        getInit(response);
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/2.jsp");
+        dispatcher.forward(request,response);
+    }
+
+    private void getInit(HttpServletResponse response) throws IOException {
+
+        System.out.println(this.getServletConfig());
+        PrintWriter out = response.getWriter();
+String name=getServletConfig().getInitParameter("name");
+        String names = getServletConfig().getInitParameter("username");
+        out.println("name"+name);
+        out.println("username"+names);
     }
 
     private void doDownload(HttpServletResponse response, String s, String s2, String s1) {
