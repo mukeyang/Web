@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <script type="text/javascript">
+        function change(img) {
+            img.src=img.src+"?"+new Date().getTime();
+        }
+
+    </script>
+</head>
+<body>
+<form action="">
+    用户名：<input type="text" name="username"><br/>
+    密码：<input type="text" name="pwd"><br/>
+    认证码：<input type="text" name="checkcode"><img src="/hello" alt="重换" onclick="change(this)" style="cursor:hand"><br/>
+    <input type="submit" value="zhuce1">
+</form>
+<form action="" method="post"><input type="text" name="" id=""><input type="submit" value=""></form>
+
+</body>
+</html>
