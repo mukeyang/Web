@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
@@ -9,10 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,6 +22,7 @@ import java.util.zip.GZIPOutputStream;
  * Created by CS on 2018/1/3.
  */
 @WebServlet(name = "Servlet", value = "/hello", asyncSupported = true, loadOnStartup = -1, initParams = {@WebInitParam(name = "username", value = "yang")})
+
 public class Servlet extends HttpServlet {
 //private ServletConfig config;
 public static final int WIDTH=120;
@@ -62,9 +61,35 @@ public static final int WIDTH=120;
 //        writer.close();
 //        System.out.println(request.getHeader("Accept-encoding"));
 //        System.out.println(request.getParameter("name"));//1
-        Map<String, String[]> map = request.getParameterMap();
-        map.forEach((a,b)-> System.out.println(a+"   "+ Arrays.deepToString(b)));
+//        Map<String, String[]> map = request.getParameterMap();
+//        map.forEach((a, b) -> System.out.println(a + "   " + Arrays.deepToString(b)));
+//        t4(request);
 //        request.getParameterValues("");
+//        getResolve(request);
+        String data = "baiwan";
+        request.setAttribute("data",data);
+//        response.getOutputStream().write("3eq".getBytes());
+        PrintWriter writer = response.getWriter();
+//        writer.write("1233");
+//        writer.close();
+        request.getRequestDispatcher("/show.jsp").forward(request,response);
+        System.out.println("ggg");
+    }
+
+    private void getResolve(HttpServletRequest request) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("utf-8");
+        System.out.println(request.getQueryString());
+        byte[] bytes = request.getParameter("username").getBytes("iso-8859-1");
+        System.out.println(new String(bytes,"utf-8"));
+    }
+
+    private void t4(HttpServletRequest request) throws IOException {
+        ServletInputStream inputStream = request.getInputStream();
+        System.out.println(inputStream.available());
+        byte[] data = new byte[1024];
+        System.out.println(data.length);
+        System.out.println(inputStream.read(data));
+        System.out.println(new String(data));
     }
 
 
